@@ -3,7 +3,7 @@ import time
 import platform
 import subprocess
 from itertools import cycle
-# :)
+
 def ping(host):
     param = "-n" if platform.system().lower() == "windows" else "-c"
     command = ["ping", param, "1", host]
@@ -31,24 +31,26 @@ def display_ping_results(websites):
     for _ in websites:
         states.append("Pinging...")
 
-    for i, website in enumerate(websites):
-        for _ in range(4):
-            os.system("cls" if os.name == "nt" else "clear")
-            for j, state in enumerate(states):
-                print(f"{websites[j]:<20} {state}")
-            states[i] = next(spinner)
-            time.sleep(0.1)
+    while True: 
+        for i, website in enumerate(websites):
+            for _ in range(4): 
+                os.system("cls" if os.name == "nt" else "clear")
+                for j, state in enumerate(states):
+                    print(f"{websites[j]:<20} {state}")
+                states[i] = next(spinner)
+                time.sleep(0.1)
 
-        ping_result = ping(website)
-        if ping_result is None:
-            states[i] = "❌ (Failed)"
-        else:
-            emoji = "✅" if ping_result <= 500 else "⚠️"
-            states[i] = f"{emoji} ({int(ping_result)}ms)"
+            ping_result = ping(website)
+            if ping_result is None:
+                states[i] = "❌ (Failed)"
+            else:
+                emoji = "✅" if ping_result <= 500 else "⚠️"
+                states[i] = f"{emoji} ({int(ping_result)}ms)"
 
-    os.system("cls" if os.name == "nt" else "clear")
-    for j, state in enumerate(states):
-        print(f"{websites[j]:<20} {state}")
+        os.system("cls" if os.name == "nt" else "clear")
+        for j, state in enumerate(states):
+            print(f"{websites[j]:<20} {state}")
+        time.sleep(2) 
 
 if __name__ == "__main__":
     websites_to_ping = [
